@@ -4,3 +4,7 @@ from django.http import HttpResponse
 # Create your views here.
 def home(request):
     return HttpResponse("<h1>¡Agente funcionando!</h1>")
+
+def clientes(request):
+    return render(request, 'clientes.html')
+

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>SaveMyClient AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+<div class="layout">
+
+  <div class="sidebar">
+    <h2>🧠 SaveMyClient AI</h2>
+    <ul>
+      <li>📊 Dashboard</li>
+      <li>👥 Clientes</li>
+      <li>⚠️ Riesgo</li>
+      <li>🤖 IA</li>
+    </ul>
+  </div>
+
+  <div class="main">
+
+    <div class="title">Dashboard Inteligente</div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>NPS Global</h3>
+        <p id="nps">75</p>
+      </div>
+
+      <div class="card">
+        <h3>Quejas</h3>
+        <p id="quejas">2</p>
+      </div>
+
+      <div class="card">
+        <h3>Riesgo General</h3>
+        <p id="riesgo" class="verde">BAJO</p>
+      </div>
+    </div>
+
+    <div class="mini-cards">
+      <div class="mini">🟢 Bajos: 120</div>
+      <div class="mini">🟡 Medios: 45</div>
+      <div class="mini">🔴 Altos: 12</div>
+    </div>
+
+    <div class="chat-container">
+      <div id="chat"></div>
+
+      <div class="input-box">
+        <input type="text" id="userInput" placeholder="Analiza cliente..." />
+        <button onclick="sendMessage()">Enviar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

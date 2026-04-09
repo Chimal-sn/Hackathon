@@ -3,33 +3,37 @@ import os
 
 # --- CONFIGURACIÓN ---
 # Asegúrate de que la llave esté bien copiada, sin espacios.
-MI_LLAVE = "AIzaSyCDO7r0mfGuBaZehNyZz3hmrll8FCVhK2E" 
+
+
+from flask import Flask, request, jsonify
+from google import genai
+
+app = Flask(__name__)
+
+MI_LLAVE = "AIzaSyBNamAAEEQ6yLin34EazcFtqRHKUmFhAYY" 
 client = genai.Client(api_key=MI_LLAVE)
 
-def hacer_consulta():
-    print("🛰️ Conectado al Guardián de Traxion (Gemini 2.5 Flash Lite)")
-    print("Escribe 'salir' para terminar.\n")
-    
-    while True:
-        # 1. Pedir la consulta al usuario
-        pregunta = input("👤 Tú: ")
-        
-        if pregunta.lower() == 'salir':
-            print("👋 Cerrando conexión. ¡Adiós!")
-            break
-            
-        try:
-            # 2. Enviar la consulta al modelo
-            response = client.models.generate_content(
-                model="gemini-2.5-flash-lite", 
-                contents=pregunta
-            )
-            
-            # 3. Mostrar la respuesta
-            print(f"🤖 Guardián: {response.text}\n")
-            
-        except Exception as e:
-            print(f"❌ Error al consultar: {e}\n")
+@app.route("/chat", methods=["POST"])
+def chat():
+    data = request.json
+    mensaje = data["message"]
+
+    prompt = f"""
+    Analiza este cliente:
+
+    {mensaje}
+
+    Clasifica el riesgo (bajo, medio o alto) y da acciones.
+    """
+
+    response = client.models.generate_content(
+        model="gemini-2.5-flash-lite",
+        contents=prompt
+    )
+
+    return jsonify({
+        "reply": response.text
+    })
 
 if __name__ == "__main__":
-    hacer_consulta()
+    app.run(debug=True)

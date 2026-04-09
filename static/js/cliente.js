@@ -125,6 +125,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
+    // 🗑 BOTONES ELIMINAR
+    document.querySelectorAll('.btn-eliminar').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const id = btn.dataset.id;
+            if (!confirm('¿Seguro que quieres eliminar este cliente?')) return;
+
+            try {
+                const response = await fetch(`/eliminar_cliente/${id}/`, {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': getCSRFToken() }
+                });
+                const data = await response.json();
+                if (data.ok) {
+                    location.reload();
+                }
+            } catch (e) {
+                console.error('Error eliminando cliente:', e);
+            }
+        });
+    });
+
     // 🔥 MODAL
     const btnAbrirModal = document.getElementById('btn-abrir-modal');
     const btnCerrarModal = document.getElementById('btn-cerrar-modal');

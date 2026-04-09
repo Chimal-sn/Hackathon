@@ -6,6 +6,10 @@
 
 body {
     font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /*Header*/
@@ -39,6 +43,7 @@ nav a {
 
 main {
     display: flex;
+    flex: 1;
 }
 
 .main_section {
@@ -87,9 +92,17 @@ main {
 .analisis_section {
     padding: 20px;
     flex: 1;
+    background-color: #F8EBEB;
 }
 
 .linea {
     background-color: #A1A796;
     grid-column: 1 / -1;
+}
+
+
+footer {
+    font-size: 0.7rem;
+    background-color: #929497;
+    padding: 5px;
 }

@@ -5,6 +5,14 @@ from django.http import HttpResponse
 def home(request):
     return HttpResponse("<h1>¡Agente funcionando!</h1>")
 
+from .models import Cliente
+
 def clientes(request):
-    return render(request, 'clientes.html')
+    lista_clientes = Cliente.objects.all()
+    
+    contexto = {
+        'clientes': lista_clientes
+    }
+    
+    return render(request, 'clientes.html', contexto)
 

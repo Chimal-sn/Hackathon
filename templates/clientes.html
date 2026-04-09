@@ -33,12 +33,17 @@
                 <p><span class="clientes_header">NUMERO <br>DE <br> QUEJAS</span></p>
                 <p><span class="clientes_header">EN RIESGO</span></p>
                 <p><span class="clientes_header">RIESGO SCORE</span></p>
-                <p>Global Tech</p>
-                <p>9.4</p>
-                <p>3</p>
-                <p>No</p>
-                <p>73%</p>
+
+                {% for cliente in clientes %}
+                <p>{{ cliente.nombre }}</p>
+                <p>{{ cliente.nps }}</p>
+                <p>{{ cliente.num_quejas }}</p>
+                <p>{% if cliente.en_riesgo %}Sí{% else %}No{% endif %}</p>
+                <p>{{ cliente.riesgo_score }}%</p>
                 <hr class="linea">
+                {% empty %}
+                <p style="grid-column: 1/-1;">No hay clientes en la base de datos.</p>
+                {% endfor %}
 
             </section>
         </section>

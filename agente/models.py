@@ -11,7 +11,7 @@ class Cliente(models.Model):
     en_riesgo = models.CharField(max_length=10, default="bajo")
     analisis_ia = models.TextField(blank=True, null=True)
     estrategia_ia = models.TextField(blank=True, null=True)    
-     # 🔥 AQUÍ VA TU FUNCIÓN
+     
     def calcular_riesgo(self):
         score = 0
 

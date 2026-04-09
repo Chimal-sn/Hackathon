@@ -5,3 +5,4 @@ __pycache__/
 *.py[cod]
 *$py.class
 avatar ia/Avatar ia.bbmodel
+avatar ia/texture.png

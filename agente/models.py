@@ -1,16 +1,17 @@
 from django.db import models
 
+# Create your models here.
 class Cliente(models.Model):
     nombre = models.CharField(max_length=200)
     nps = models.IntegerField()
     num_quejas = models.IntegerField(default=0)
-
     comentario = models.TextField(blank=True, null=True)
     riesgo_score = models.DecimalField(default=0, max_digits=5, decimal_places=2)
     en_riesgo = models.BooleanField(default=False)
+    en_riesgo = models.CharField(max_length=10, default="bajo")
     analisis_ia = models.TextField(blank=True, null=True)
-    estrategia_ia = models.TextField(blank=True, null=True)
-
+    estrategia_ia = models.TextField(blank=True, null=True)    
+     # 🔥 AQUÍ VA TU FUNCIÓN
     def calcular_riesgo(self):
         score = 0
 
@@ -21,31 +22,15 @@ class Cliente(models.Model):
             score += 30
 
         self.riesgo_score = score
-        self.en_riesgo = score >= 50
 
-    def generar_analisis(self):
-        from openai import OpenAI
-        client = OpenAI(api_key="AIzaSyBNamAAEEQ6yLin34EazcFtqRHKUmFhAYY")
+        if score >= 70:
+            self.en_riesgo= "alto"
+        elif score >= 40:
+            self.en_riesgo= "medio"
+        else:
+            self.en_riesgo= "bajo"
 
-        prompt = f"""
-        Cliente: {self.nombre}
-        NPS: {self.nps}
-        Quejas: {self.num_quejas}
-        Comentario: {self.comentario}
-
-        Analiza el riesgo y da una estrategia.
-        """
-
-        response = client.chat.completions.create(
-            model="gpt-4.1-mini",
-            messages=[{"role": "user", "content": prompt}]
-        )
-
-        texto = response.choices[0].message.content
-        self.analisis_ia = texto
-        self.estrategia_ia = texto
-
+    # 🔥 MUY IMPORTANTE: se ejecuta automáticamente al guardar
     def save(self, *args, **kwargs):
         self.calcular_riesgo()
-        self.generar_analisis()
         super().save(*args, **kwargs)

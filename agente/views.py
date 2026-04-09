@@ -29,3 +29,50 @@ def clientes(request):
     
     return render(request, 'clientes.html', contexto)
 
+
+
+from django.http import JsonResponse
+from .models import Cliente
+from google import genai
+import json
+
+def analizar_cliente(request, id):
+    try:
+        cliente = Cliente.objects.get(id=id)
+
+        client = genai.Client(api_key="TU_API_KEY")
+
+        prompt = f"""
+        Cliente:
+        Nombre: {cliente.nombre}
+        NPS: {cliente.nps}
+        Quejas: {cliente.num_quejas}
+
+        Responde en JSON:
+        {{
+            "riesgo": "alto|medio|bajo",
+            "explicacion": "...",
+            "acciones": "..."
+        }}
+        """
+
+        response = client.models.generate_content(
+            model="gemini-2.5-flash-lite",
+            contents=prompt
+        )
+
+        texto = response.text
+
+        return JsonResponse({
+            "analisis": texto,
+            "estrategia": texto
+        })
+
+    except Exception as e:
+        print("ERROR IA:", e)
+
+        # 🔥 RESPUESTA CONTROLADA (NO truena frontend)
+        return JsonResponse({
+            "analisis": "⚠️ IA no disponible (límite alcanzado)",
+            "estrategia": "Intenta más tarde o usa modo manual"
+        })

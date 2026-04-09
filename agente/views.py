@@ -75,9 +75,9 @@ Comentario: {cliente.comentario}
         cliente.analisis_ia = data["explicacion"]
         cliente.estrategia_ia = data["acciones"]
 
-        # si tienes campo riesgo_nivel
-        if hasattr(cliente, "riesgo_nivel"):
-            cliente.riesgo_nivel = data["riesgo"]
+         # si tienes campo riesgo_nivel
+        if hasattr(cliente, "riesgo_score"):
+            cliente.riesgo_score = data["riesgo"]
 
         cliente.save()
 

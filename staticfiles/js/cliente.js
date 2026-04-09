@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const mensajeInicial = document.getElementById('mensaje_inicial');
     const panelAnalisis = document.getElementById('panel-analisis');
     const panelEstrategia = document.getElementById('panel-estrategia');
+    const robotViewer = document.getElementById('robot-viewer');
 
     // 🔥 BOTONES VER (ya analizados)
     document.querySelectorAll('.btn-ver-analisis').forEach(boton => {
@@ -17,6 +18,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             panelAnalisis.textContent = analisis;
             panelEstrategia.textContent = estrategia;
+
+            if (robotViewer) {
+                robotViewer.animationName = 'Alegre';
+                robotViewer.play();
+            }
         });
     });
 
@@ -30,6 +36,17 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 panelAnalisis.innerText = "⏳ Analizando...";
                 panelEstrategia.innerText = "";
+
+                if (robotViewer) {
+                    robotViewer.animationName = 'Sentarse';
+                    robotViewer.play();
+                    setTimeout(() => {
+                        if (robotViewer.animationName === 'Sentarse') {
+                            robotViewer.animationName = 'Esperar';
+                            robotViewer.play();
+                        }
+                    }, 920);
+                }
 
                 let response = await fetch(`/analizar_cliente/${id}/`, {
                     method: "POST",
@@ -91,6 +108,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 btn.setAttribute("data-analisis", data.analisis);
                 btn.setAttribute("data-estrategia", data.estrategia);
+
+                if (robotViewer) {
+                    robotViewer.animationName = 'Alegre';
+                    robotViewer.play();
+                }
 
             } catch (error) {
                 console.error(error);

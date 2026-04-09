@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/clientes.css' %}">
+</head>
+
+<body>
+    <header class="header">
+        <nav>
+            <a href=""><span class="logo">TRAXION</span></a>
+            <a href="">Clientes</a>
+        </nav>
+    </header>
+    <main>
+        <section class="main_section">
+            <header>
+                <h1>CLIENTES</h1>
+                <button>+ Agregar cliente</button>
+            </header>
+            <section class="clientes_section">
+                <div>
+                    <p>Nombre</p>
+                    <p>NPS</p>
+                    <p>Numero <br> de <br> quejas</p>
+                    <p>En riesgo</p>
+                    <p>Riesgo Score</p>
+                </div>
+            </section>
+        </section>
+        <section class="analisis_section">
+            <h2>ANALISIS DEL AGENTE</h2>
+            <div class="riesgo_section">
+                <h3>Riesgo detectado</h3>
+                <p>Se detecto un riesgo</p>
+            </div>
+            <div class="estrategia_section">
+                <h3>Estrategia</h3>
+                <p>Se detecto un riesgo</p>
+            </div>
+            <button>Ver más</button>
+        </section>
+    </main>
+    <footer>
+
+    </footer>
+</body>
+
+</html>

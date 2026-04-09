@@ -8,9 +8,78 @@ body {
     font-family: 'Inter', sans-serif;
 }
 
+/*Header*/
+
 .header {
     background-color: #D0DF00;
-    display: flex;
     padding: 30px;
     font-family: 'Montserrat', sans-serif;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 20%;
+}
+
+nav a {
+    color: #6A6E63;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.header .logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 8px;
+}
+
+/*Main*/
+
+main {
+    display: flex;
+}
+
+.main_section {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    flex: 2;
+    gap: 50px;
+}
+
+.main_section header {
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.agregar_btn {
+    background-color: #D0DF00;
+    border: none;
+    font-size: 0.8rem;
+    padding: 10px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: center;
+}
+
+.main_section h1 {
+    font-size: 2.5rem;
+}
+
+.clientes_header {
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #6A6E63;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.analisis_section {
+    padding: 20px;
+    flex: 1;
 }

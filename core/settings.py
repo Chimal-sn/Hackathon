@@ -32,6 +32,9 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
+# Confiar en las peticiones que vengan del dominio de Railway (Evita el error 403 CSRF)
+CSRF_TRUSTED_ORIGINS = ['https://hackathon-production-3c28.up.railway.app']
+
 
 # Application definition
 

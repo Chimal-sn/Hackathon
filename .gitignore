@@ -6,6 +6,7 @@ __pycache__/
 *$py.class
 avatar ia/Avatar ia.bbmodel
 avatar ia/texture.png
-
+guardian.py
+server.py
 # Variables de entorno
 .env

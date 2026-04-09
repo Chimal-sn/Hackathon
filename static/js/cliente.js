@@ -23,6 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
             let id = btn.dataset.id;
 
             try {
+                // Mostrar el panel de análisis
+                mensajeInicial.style.display = 'none';
+                analisisContainer.classList.add('active');
+
                 panelAnalisis.innerText = "⏳ Analizando...";
                 panelEstrategia.innerText = "";
 

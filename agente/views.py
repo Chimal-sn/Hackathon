@@ -30,20 +30,15 @@ from django.http import JsonResponse
 from .models import Cliente
 from google import genai
 import json
-
-def analizar_cliente(request, id):
-    from django.http import JsonResponse
-from .models import Cliente
-from google import genai
-import json
 import re
+import os
 
 def analizar_cliente(request, id):
     try:
         cliente = Cliente.objects.get(id=id)
 
-
-        client = genai.Client(api_key="AIzaSyBNamAAEEQ6yLin34EazcFtqRHKUmFhAYY")
+        api_key = os.getenv("GEMINI_API_KEY")
+        client = genai.Client(api_key=api_key)
 
 
         prompt = f"""

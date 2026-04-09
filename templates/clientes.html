@@ -13,6 +13,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/clientes.css' %}">
     <script src="{% static 'js/cliente.js' %}"></script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 </head>
 
 <body>
@@ -47,13 +48,8 @@
                     data-analisis="{{ cliente.analisis_ia|default_if_none:'' }}"
                     data-estrategia="{{ cliente.estrategia_ia|default_if_none:'' }}">Ver</button>
                 {% else %}
-                <button 
-                    class="agregar_btn btn-analizar"
-                    data-id="{{ cliente.id }}"
-                    data-nombre="{{ cliente.nombre }}"
-                    data-nps="{{ cliente.nps }}"
-                    data-quejas="{{ cliente.num_quejas }}"
-                >
+                <button class="agregar_btn btn-analizar" data-id="{{ cliente.id }}" data-nombre="{{ cliente.nombre }}"
+                    data-nps="{{ cliente.nps }}" data-quejas="{{ cliente.num_quejas }}">
                     Analizar
                 </button>
                 {% endif %}
@@ -66,8 +62,14 @@
             </section>
         </section>
         <section class="analisis_section">
+            <div class="card-robot">
+                <model-viewer src="{% static 'assets/avatar.gltf' %}" alt="Guardián de Traxion" auto-rotate
+                    camera-controls autoplay animation-name="Animation" exposure="0.7" shadow-intensity="1"
+                    environment-image="neutral" camera-orbit="180deg 75deg 105%"
+                    style="width: 100%; height: 100px; outline: none;">
+                </model-viewer>
+            </div>
             <h3 id="mensaje_inicial">Haz clic en un cliente en la tabla de la izquierda para ver su análisis.</h3>
-
             <div id="analisis_container">
                 <h2>ANALISIS DEL AGENTE</h2>
                 <div class="riesgo_section color_amarillo">

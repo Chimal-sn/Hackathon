@@ -1,0 +1,286 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/*Header*/
+
+.header {
+    background-color: #D0DF00;
+    padding: 30px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 20%;
+}
+
+nav a {
+    color: #6A6E63;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.header .logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 8px;
+}
+
+/*Main*/
+
+main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.main_section {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    flex: 2;
+    gap: 50px;
+    overflow-y: auto;
+    /* Agrega scroll vertical si la lista crece mucho */
+}
+
+.main_section header {
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.agregar_btn {
+    background-color: #D0DF00;
+    border: none;
+    font-size: 0.8rem;
+    padding: 10px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: center;
+}
+
+.main_section h1 {
+    font-size: 2.5rem;
+}
+
+
+.clientes_section {
+    width: 70%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    align-items: center;
+    row-gap: 30px;
+    font-size: 0.8rem;
+}
+
+.clientes_header {
+    color: #6A6E63;
+    font-weight: 500;
+}
+
+.analisis_section {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    gap: 20px;
+    flex: 1;
+    background-color: #F8EBEB;
+    overflow-y: auto;
+    /* Agrega scroll independiente al análisis si es texto muy largo */
+}
+
+.analisis_section h2 {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.analisis_section h3 {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.analisis_section p {
+    font-size: 0.8rem;
+}
+
+#analisis_container {
+    display: none;
+}
+
+#analisis_container.active {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+.riesgo_section,
+.estrategia_section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+}
+
+
+.linea {
+    background-color: #A1A796;
+    grid-column: 1 / -1;
+}
+
+.color_amarillo {
+    background-color: #D0DF00;
+}
+
+.color_blanco {
+    background-color: #FFFFFF;
+}
+
+footer {
+    font-size: 0.7rem;
+    background-color: #929497;
+    padding: 5px;
+}
+
+
+.formulario_container {
+    display: none;
+}
+
+.formulario_container.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+}
+
+.formulario_container form {
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    width: 350px;
+    gap: 15px;
+}
+
+.formulario_container form p {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.formulario_container form input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+}
+
+.formulario_container form input:focus {
+    border-color: #D0DF00;
+}
+
+.botones_formulario {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+#btn-cerrar-modal {
+    background-color: #FFFFFF;
+    border: 1px solid #ccc;
+    color: #333;
+}
+
+/* =========================================
+   DISEÑO RESPONSIVO (Móviles y Tablets)
+   ========================================= */
+@media (max-width: 900px) {
+    main {
+        flex-direction: column;
+        overflow-y: auto; /* Permitimos que la página baje en móviles */
+    }
+
+    .main_section, 
+    .analisis_section {
+        flex: none;
+        width: 100%;
+        overflow-y: visible; /* Desactivar los scrolls independientes */
+        padding: 20px;
+    }
+
+    /* Adaptar cabecera y tabla a 100% */
+    .main_section header, 
+    .clientes_section {
+        width: 100%;
+    }
+
+    .main_section header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .clientes_section {
+        /* Regresamos al Grid tradicional pero forzamos a que todo encaje sin scroll */
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        font-size: 0.65rem; /* Achicamos la letra para que quepan las 6 columnas */
+        row-gap: 15px;
+        column-gap: 2px;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .clientes_section p {
+        white-space: normal;
+        word-wrap: break-word; /* Permite que las palabras largas bajen de línea */
+        overflow-wrap: break-word;
+    }
+
+    .linea {
+        grid-column: 1 / -1;
+        width: 100%;
+        background-color: #A1A796;
+        margin: 5px 0;
+    }
+
+    /* Hacer que el formulario encaje en el ancho de la pantalla */
+    .formulario_container form {
+        width: 90%;
+    }
+
+    /* Ajustar el botón dentro de la tablita apretada */
+    .clientes_section .agregar_btn {
+        padding: 8px 5px;
+        font-size: 0.6rem;
+        width: 100%; /* Toma todo el ancho de su mini celda */
+        text-align: center;
+    }
+}

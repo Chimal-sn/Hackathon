@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/clientes.css' %}">
+    <script src="{% static 'js/cliente.js' %}"></script>
+</head>
+
+<body>
+    <header class="header">
+        <nav>
+            <a href=""><span class="logo">TRAXION</span></a>
+            <a href="">Clientes</a>
+        </nav>
+    </header>
+    <main>
+        <section class="main_section">
+            <header>
+                <h1>CLIENTES</h1>
+                <button id="btn-abrir-modal" class="agregar_btn">+ Agregar cliente</button>
+            </header>
+            <section class="clientes_section">
+                <p><span class="clientes_header">NOMBRE</span></p>
+                <p><span class="clientes_header">NPS</span></p>
+                <p><span class="clientes_header">NUMERO <br>DE <br> QUEJAS</span></p>
+                <p><span class="clientes_header">EN RIESGO</span></p>
+                <p><span class="clientes_header">RIESGO SCORE</span></p>
+                <p><span class="clientes_header">ANALISIS</span></p>
+                {% for cliente in clientes %}
+                <p>{{ cliente.nombre }}</p>
+                <p>{{ cliente.nps }}</p>
+                <p>{{ cliente.num_quejas }}</p>
+                <p>{% if cliente.en_riesgo %}Sí{% else %}No{% endif %}</p>
+
+                <p>{{ cliente.riesgo_score }}%</p>
+                {% if cliente.analisis_ia %}
+                <button class="agregar_btn btn-ver-analisis"
+                    data-analisis="{{ cliente.analisis_ia|default_if_none:'' }}"
+                    data-estrategia="{{ cliente.estrategia_ia|default_if_none:'' }}">Ver</button>
+                {% else %}
+                <button class="agregar_btn">Analizar</button>
+                {% endif %}
+                <hr class="linea">
+
+                {% empty %}
+                <p style="grid-column: 1/-1;">No hay clientes en la base de datos.</p>
+                {% endfor %}
+
+            </section>
+        </section>
+        <section class="analisis_section">
+            <h3 id="mensaje_inicial">Haz clic en un cliente en la tabla de la izquierda para ver su análisis.</h3>
+
+            <div id="analisis_container">
+                <h2>ANALISIS DEL AGENTE</h2>
+                <div class="riesgo_section color_amarillo">
+                    <h3>Riesgo detectado</h3>
+                    <p id="panel-analisis"></p>
+                </div>
+                <div class="estrategia_section color_blanco">
+                    <h3>Estrategia</h3>
+                    <p id="panel-estrategia"></p>
+                </div>
+                <button class="agregar_btn">Ver más</button>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>Hackathon 2026 - Traxion</p>
+    </footer>
+
+    <div class="formulario_container">
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="botones_formulario">
+                <button type="submit" class="agregar_btn">Agregar</button>
+                <button type="button" class="agregar_btn" id="btn-cerrar-modal">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -44,6 +44,7 @@ nav a {
 main {
     display: flex;
     flex: 1;
+    overflow: hidden;
 }
 
 .main_section {
@@ -52,6 +53,8 @@ main {
     padding: 30px;
     flex: 2;
     gap: 50px;
+    overflow-y: auto;
+    /* Agrega scroll vertical si la lista crece mucho */
 }
 
 .main_section header {
@@ -78,7 +81,7 @@ main {
 .clientes_section {
     width: 70%;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     align-items: center;
     row-gap: 30px;
     font-size: 0.8rem;
@@ -90,16 +93,62 @@ main {
 }
 
 .analisis_section {
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    gap: 20px;
     flex: 1;
     background-color: #F8EBEB;
+    overflow-y: auto;
+    /* Agrega scroll independiente al análisis si es texto muy largo */
 }
+
+.analisis_section h2 {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.analisis_section h3 {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.analisis_section p {
+    font-size: 0.8rem;
+}
+
+#analisis_container {
+    display: none;
+}
+
+#analisis_container.active {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+.riesgo_section,
+.estrategia_section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+}
+
 
 .linea {
     background-color: #A1A796;
     grid-column: 1 / -1;
 }
 
+.color_amarillo {
+    background-color: #D0DF00;
+}
+
+.color_blanco {
+    background-color: #FFFFFF;
+}
 
 footer {
     font-size: 0.7rem;

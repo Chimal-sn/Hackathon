@@ -33,14 +33,23 @@
                 <p><span class="clientes_header">NUMERO <br>DE <br> QUEJAS</span></p>
                 <p><span class="clientes_header">EN RIESGO</span></p>
                 <p><span class="clientes_header">RIESGO SCORE</span></p>
-
+                <p><span class="clientes_header">ANALISIS</span></p>
                 {% for cliente in clientes %}
                 <p>{{ cliente.nombre }}</p>
                 <p>{{ cliente.nps }}</p>
                 <p>{{ cliente.num_quejas }}</p>
                 <p>{% if cliente.en_riesgo %}Sí{% else %}No{% endif %}</p>
+
                 <p>{{ cliente.riesgo_score }}%</p>
+                {% if cliente.en_riesgo %}
+                <button class="agregar_btn btn-ver-analisis">Analizar</button>
+                {% else %}
+                <button class="agregar_btn btn-ver-analisis"
+                    data-analisis="{{ cliente.analisis_ia|default_if_none:'' }}"
+                    data-estrategia="{{ cliente.estrategia_ia|default_if_none:'' }}">Ver</button>
+                {% endif %}
                 <hr class="linea">
+
                 {% empty %}
                 <p style="grid-column: 1/-1;">No hay clientes en la base de datos.</p>
                 {% endfor %}
@@ -48,21 +57,53 @@
             </section>
         </section>
         <section class="analisis_section">
-            <h2>ANALISIS DEL AGENTE</h2>
-            <div class="riesgo_section">
-                <h3>Riesgo detectado</h3>
-                <p>Se detecto un riesgo</p>
+            <h3 id="mensaje_inicial">Haz clic en un cliente en la tabla de la izquierda para ver su análisis.</h3>
+
+            <div id="analisis_container">
+                <h2>ANALISIS DEL AGENTE</h2>
+                <div class="riesgo_section color_amarillo">
+                    <h3>Riesgo detectado</h3>
+                    <p id="panel-analisis"></p>
+                </div>
+                <div class="estrategia_section color_blanco">
+                    <h3>Estrategia</h3>
+                    <p id="panel-estrategia"></p>
+                </div>
+                <button class="agregar_btn">Ver más</button>
             </div>
-            <div class="estrategia_section">
-                <h3>Estrategia</h3>
-                <p>Se detecto un riesgo</p>
-            </div>
-            <button>Ver más</button>
         </section>
     </main>
     <footer>
         <p>Hackathon 2026 - Traxion</p>
     </footer>
+
+    <!-- Script para actualizar la vista lateral dinámicamente sin recargar la página -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const analisisContainer = document.getElementById('analisis_container');
+            const mensajeInicial = document.getElementById('mensaje_inicial');
+            const botones = document.querySelectorAll('.btn-ver-analisis');
+            const panelAnalisis = document.getElementById('panel-analisis');
+            const panelEstrategia = document.getElementById('panel-estrategia');
+
+            botones.forEach(boton => {
+                boton.addEventListener('click', (e) => {
+
+                    mensajeInicial.style.display = 'none';
+                    analisisContainer.classList.add('active');
+
+
+
+                    const analisis = e.target.getAttribute('data-analisis');
+                    const estrategia = e.target.getAttribute('data-estrategia');
+
+                    // Actualizamos el panel lateral
+                    panelAnalisis.textContent = analisis;
+                    panelEstrategia.textContent = estrategia;
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -15,20 +15,27 @@ class Cliente(models.Model):
     def calcular_riesgo(self):
         score = 0
 
+        # 🔴 NPS bajo
         if self.nps < 6:
             score += 50
+        elif self.nps < 8:
+            score += 20
 
-        if self.num_quejas > 3:
-            score += 30
+        # 🔴 muchas quejas
+        if self.num_quejas > 5:
+            score += 40
+        elif self.num_quejas > 2:
+            score += 20
 
         self.riesgo_score = score
 
+        # 🔥 clasificación
         if score >= 70:
-            self.en_riesgo= "alto"
+            self.en_riesgo = True
         elif score >= 40:
-            self.en_riesgo= "medio"
+            self.en_riesgo = True
         else:
-            self.en_riesgo= "bajo"
+            self.en_riesgo = False
 
     # 🔥 MUY IMPORTANTE: se ejecuta automáticamente al guardar
     def save(self, *args, **kwargs):

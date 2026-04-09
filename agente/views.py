@@ -64,8 +64,10 @@ Comentario: {cliente.comentario}
         cliente.analisis_ia = data["explicacion"]
         cliente.estrategia_ia = data["acciones"]
 
+
         if hasattr(cliente, "riesgo_score"):
             cliente.riesgo_score = data["riesgo"]
+
 
         cliente.save()
 

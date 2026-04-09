@@ -32,24 +32,37 @@ from google import genai
 import json
 
 def analizar_cliente(request, id):
+    from django.http import JsonResponse
+from .models import Cliente
+from google import genai
+import json
+import re
+
+def analizar_cliente(request, id):
     try:
         cliente = Cliente.objects.get(id=id)
 
-        client = genai.Client(api_key="AQUI LA API")
+
+        client = genai.Client(api_key="AIzaSyBNamAAEEQ6yLin34EazcFtqRHKUmFhAYY")
+
 
         prompt = f"""
-        Cliente:
-        Nombre: {cliente.nombre}
-        NPS: {cliente.nps}
-        Quejas: {cliente.num_quejas}
+Eres un sistema de análisis de clientes.
 
-        Responde en JSON:
-        {{
-            "riesgo": "alto|medio|bajo",
-            "explicacion": "...",
-            "acciones": "..."
-        }}
-        """
+RESPONDE SOLO EN JSON:
+
+{{
+  "riesgo": "alto|medio|bajo",
+  "explicacion": "máximo 2 líneas",
+  "acciones": "máximo 3 acciones"
+}}
+
+Cliente:
+Nombre: {cliente.nombre}
+NPS: {cliente.nps}
+Quejas: {cliente.num_quejas}
+Comentario: {cliente.comentario}
+"""
 
         response = client.models.generate_content(
             model="gemma-4-26b-a4b-it",
@@ -58,16 +71,34 @@ def analizar_cliente(request, id):
 
         texto = response.text
 
+        # 🔥 LIMPIAR ```json
+        limpio = re.sub(r"```json|```", "", texto).strip()
+
+        data = json.loads(limpio)
+
+        # 🔥 GUARDAR EN BD (AQUÍ ESTÁ LA CLAVE)
+        cliente.analisis_ia = data["explicacion"]
+        cliente.estrategia_ia = data["acciones"]
+
+        # si tienes campo riesgo_nivel
+        if hasattr(cliente, "riesgo_nivel"):
+            cliente.riesgo_nivel = data["riesgo"]
+
+        cliente.save()
+
+        # 🔥 RESPUESTA LIMPIA (YA NO STRING)
         return JsonResponse({
-            "analisis": texto,
-            "estrategia": texto
+            "analisis": data["explicacion"],
+            "estrategia": data["acciones"],
+            "riesgo": data["riesgo"]
         })
 
     except Exception as e:
         print("ERROR IA:", e)
 
-        # 🔥 RESPUESTA CONTROLADA (NO truena frontend)
         return JsonResponse({
-            "analisis": "⚠️ IA no disponible (límite alcanzado)",
-            "estrategia": "Intenta más tarde o usa modo manual"
-        })
+            "analisis": "❌ Error con IA",
+            "estrategia": "Intenta de nuevo"
+        }, status=500)
+    
+    

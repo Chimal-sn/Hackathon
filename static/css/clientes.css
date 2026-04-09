@@ -284,3 +284,59 @@ footer {
         text-align: center;
     }
 }
+
+/* 🔥 CARD DEL RESULTADO IA */
+.resultado-ia {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 15px;
+    color: #292727;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    transition: 0.3s;
+}
+
+.resultado-ia:hover {
+    transform: scale(1.02);
+}
+
+/* TITULO */
+.resultado-ia h3 {
+    margin-bottom: 10px;
+}
+
+/* TEXTO */
+.resultado-ia p {
+    margin: 5px 0;
+}
+
+/* COLORES POR RIESGO */
+.riesgo-alto {
+    border-left: 6px solid #ff4d4d;
+}
+
+.riesgo-medio {
+    border-left: 6px solid #ffc107;
+}
+
+.riesgo-bajo {
+    border-left: 6px solid #28a745;
+}
+.estrategia-texto {
+    color: #1e90ff; /* azul */
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.riesgo-alto {
+    color: white;
+}
+
+.riesgo-medio {
+    color: black;
+}
+
+.riesgo-bajo {
+    color: white;
+}

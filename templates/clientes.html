@@ -91,13 +91,8 @@
 
                     mensajeInicial.style.display = 'none';
                     analisisContainer.classList.add('active');
-
-
-
                     const analisis = e.target.getAttribute('data-analisis');
                     const estrategia = e.target.getAttribute('data-estrategia');
-
-                    // Actualizamos el panel lateral
                     panelAnalisis.textContent = analisis;
                     panelEstrategia.textContent = estrategia;
                 });

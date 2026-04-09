@@ -6,47 +6,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const panelEstrategia = document.getElementById('panel-estrategia');
     const robotViewer = document.getElementById('robot-viewer');
 
-    // 🔥 BOTONES VER (ya analizados)
-    document.querySelectorAll('.btn-ver-analisis').forEach(boton => {
-        boton.addEventListener('click', (e) => {
+    // 🔥 EVENTO GLOBAL (SOLUCIÓN)
+    document.addEventListener("click", async (e) => {
+
+        const btn = e.target.closest("button");
+        if (!btn) return;
+
+        // =========================
+        // 🔵 BOTÓN ANALIZAR
+        // =========================
+        if (btn.classList.contains("btn-analizar")) {
 
             mensajeInicial.style.display = 'none';
             analisisContainer.classList.add('active');
-
-            const analisis = e.target.getAttribute('data-analisis');
-            const estrategia = e.target.getAttribute('data-estrategia');
-
-            panelAnalisis.textContent = analisis;
-            panelEstrategia.textContent = estrategia;
-
-            if (robotViewer) {
-                robotViewer.animationName = 'Alegre';
-                robotViewer.play();
-            }
-        });
-    });
-
-    // 🔥 BOTONES ANALIZAR
-    document.querySelectorAll(".btn-analizar").forEach(btn => {
-
-        btn.addEventListener("click", async () => {
 
             let id = btn.dataset.id;
 
             try {
                 panelAnalisis.innerText = "⏳ Analizando...";
                 panelEstrategia.innerText = "";
-
-                if (robotViewer) {
-                    robotViewer.animationName = 'Sentarse';
-                    robotViewer.play();
-                    setTimeout(() => {
-                        if (robotViewer.animationName === 'Sentarse') {
-                            robotViewer.animationName = 'Esperar';
-                            robotViewer.play();
-                        }
-                    }, 920);
-                }
 
                 let response = await fetch(`/analizar_cliente/${id}/`, {
                     method: "POST",
@@ -56,75 +34,55 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 });
 
-                if (!response.ok) {
-                    let errorText = await response.text();
-                    console.error("ERROR BACKEND:", errorText);
-                    throw new Error("Error en servidor");
-                }
-
                 let data = await response.json();
 
-                // 🔥 VALIDAR
-                if (!data.analisis || !data.estrategia || !data.riesgo) {
-                    throw new Error("Datos incompletos");
-                }
-
-                // 🎨 CLASE DE RIESGO
-                let claseRiesgo = "";
-                if (data.riesgo === "alto") claseRiesgo = "riesgo-alto";
-                else if (data.riesgo === "medio") claseRiesgo = "riesgo-medio";
-                else claseRiesgo = "riesgo-bajo";
-
-                // 🔥 HTML BONITO
                 panelAnalisis.innerHTML = `
-                    <div class="resultado-ia ${claseRiesgo}">
-                        <h3>🚨 Riesgo: ${data.riesgo.toUpperCase()}</h3>
-                        <p><b>Explicación:</b> ${data.analisis}</p>
-                    </div>
+                    <h3>🚨 Riesgo: ${data.riesgo}</h3>
+                    <p>${data.analisis}</p>
                 `;
 
                 panelEstrategia.innerHTML = `
-                    <div class="resultado-ia">
-                        <h3>📌 Acciones</h3>
-                        <p>${data.estrategia}</p>
-                    </div>
+                    <p>${data.estrategia}</p>
                 `;
 
-                // 🔥 COLOR VISUAL
-                let riesgoBox = document.querySelector(".riesgo_section");
-
-                if (data.riesgo === "alto") {
-                    riesgoBox.style.background = "#ff4d4d";
-                } else if (data.riesgo === "medio") {
-                    riesgoBox.style.background = "#f0cb5b";
-                } else {
-                    riesgoBox.style.background = "#28a745";
-                }
-
-                // 🔥 CAMBIAR BOTÓN A "VER"
+                // 🔁 Cambiar botón a VER
                 btn.innerText = "Ver";
                 btn.classList.remove("btn-analizar");
                 btn.classList.add("btn-ver-analisis");
 
-                btn.setAttribute("data-analisis", data.analisis);
-                btn.setAttribute("data-estrategia", data.estrategia);
-
-                if (robotViewer) {
-                    robotViewer.animationName = 'Alegre';
-                    robotViewer.play();
-                }
+                btn.dataset.analisis = data.analisis;
+                btn.dataset.estrategia = data.estrategia;
 
             } catch (error) {
-                console.error(error);
+    console.error(error);
 
-                panelAnalisis.innerText = "❌ Error con IA";
-                panelEstrategia.innerText = "Intenta de nuevo";
-            }
+    mensajeInicial.style.display = 'none';
+    analisisContainer.classList.add('active');
 
-        });
+    panelAnalisis.innerHTML = `
+        <div style="color:red;">
+            ❌ Error al analizar cliente
+        </div>
+    `;
+    panelEstrategia.innerText = "";
+}
+        }
+
+        // =========================
+        // 🟢 BOTÓN VER
+        // =========================
+        if (btn.classList.contains("btn-ver-analisis")) {
+
+            mensajeInicial.style.display = 'none';
+            analisisContainer.classList.add('active');
+
+            panelAnalisis.textContent = btn.dataset.analisis;
+            panelEstrategia.textContent = btn.dataset.estrategia;
+        }
 
     });
 
+});
     // 🗑 BOTONES ELIMINAR
     document.querySelectorAll('.btn-eliminar').forEach(btn => {
         btn.addEventListener('click', async () => {
@@ -163,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-});
+
 
 // 🔐 CSRF
 function getCSRFToken() {

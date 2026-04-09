@@ -25,12 +25,11 @@ def clientes(request):
     
     return render(request, 'clientes.html', contexto)
 
-
 def analizar_cliente(request, id):
     try:
         cliente = Cliente.objects.get(id=id)
 
-        api_key = os.getenv("GEMINI_API_KEY")
+        api_key = "AIzaSyBNamAAEEQ6yLin34EazcFtqRHKUmFhAYY"
         client = genai.Client(api_key=api_key)
 
         prompt = f"""
@@ -57,17 +56,20 @@ Comentario: {cliente.comentario}
         )
 
         texto = response.text
-
         limpio = re.sub(r"```json|```", "", texto).strip()
-        data = json.loads(limpio)
+
+        try:
+            data = json.loads(limpio)
+        except:
+            return JsonResponse({
+                "analisis": "Error interpretando IA",
+                "estrategia": limpio,
+                "riesgo": "medio"
+            })
 
         cliente.analisis_ia = data["explicacion"]
         cliente.estrategia_ia = data["acciones"]
-
-
-        if hasattr(cliente, "riesgo_score"):
-            cliente.riesgo_score = data["riesgo"]
-
+        cliente.riesgo_score = data["riesgo"]
 
         cliente.save()
 
@@ -78,10 +80,13 @@ Comentario: {cliente.comentario}
         })
 
     except Exception as e:
-        print("ERROR IA:", e)
+        import traceback
+        traceback.print_exc()
+
         return JsonResponse({
-            "analisis": "❌ Error con IA",
-            "estrategia": "Intenta de nuevo"
+            "analisis": str(e),
+            "estrategia": "Error real mostrado",
+            "riesgo": "medio"
         }, status=500)
 
 

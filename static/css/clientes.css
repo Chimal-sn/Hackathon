@@ -69,17 +69,26 @@ main {
     font-size: 2.5rem;
 }
 
-.clientes_header {
+
+.clientes_section {
     width: 70%;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
     align-items: center;
-    color: #6A6E63;
+    row-gap: 40px;
     font-size: 0.8rem;
+}
+
+.clientes_header {
+    color: #6A6E63;
     font-weight: 500;
 }
 
 .analisis_section {
     padding: 20px;
     flex: 1;
+}
+
+.linea {
+    grid-column: 1 / -1;
 }

@@ -1,5 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // =========================
+    // 🎬 SPLASH SCREEN (solo una vez por sesión)
+    // =========================
+    const splash = document.getElementById('splash-screen');
+    if (splash) {
+        if (sessionStorage.getItem('splash_visto')) {
+            // Ya lo vio antes en esta sesión, quitar de inmediato
+            splash.remove();
+        } else {
+            // Primera vez, mostrar y marcar como visto
+            sessionStorage.setItem('splash_visto', '1');
+            setTimeout(() => {
+                splash.classList.add('oculto');
+                setTimeout(() => splash.remove(), 800);
+            }, 6000);
+        }
+    }
+
     const analisisContainer = document.getElementById('analisis_container');
     const mensajeInicial = document.getElementById('mensaje_inicial');
     const panelAnalisis = document.getElementById('panel-analisis');

@@ -6,30 +6,33 @@ document.addEventListener("DOMContentLoaded", () => {
     const panelEstrategia = document.getElementById('panel-estrategia');
     const robotViewer = document.getElementById('robot-viewer');
 
-    // 🔥 EVENTO GLOBAL (SOLUCIÓN)
-    document.addEventListener("click", async (e) => {
-
-        const btn = e.target.closest("button");
-        if (!btn) return;
-
-        // =========================
-        // 🔵 BOTÓN ANALIZAR
-        // =========================
-        if (btn.classList.contains("btn-analizar")) {
-
-            mensajeInicial.style.display = 'none';
-            analisisContainer.classList.add('active');
+    // =========================
+    // 🔵 BOTÓN ANALIZAR
+    // =========================
+    document.querySelectorAll(".btn-analizar").forEach(btn => {
+        btn.addEventListener("click", async () => {
 
             let id = btn.dataset.id;
 
+            // Mostrar el panel inmediatamente
+            mensajeInicial.style.display = 'none';
+            analisisContainer.classList.add('active');
+            panelAnalisis.innerText = "⏳ Analizando...";
+            panelEstrategia.innerText = "";
+
+            // Animación del robot
+            if (robotViewer) {
+                robotViewer.animationName = 'Sentarse';
+                robotViewer.play();
+                setTimeout(() => {
+                    if (robotViewer.animationName === 'Sentarse') {
+                        robotViewer.animationName = 'Esperar';
+                        robotViewer.play();
+                    }
+                }, 920);
+            }
+
             try {
-                // Mostrar el panel de análisis
-                mensajeInicial.style.display = 'none';
-                analisisContainer.classList.add('active');
-
-                panelAnalisis.innerText = "⏳ Analizando...";
-                panelEstrategia.innerText = "";
-
                 let response = await fetch(`/analizar_cliente/${id}/`, {
                     method: "POST",
                     headers: {
@@ -38,56 +41,83 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 });
 
+                if (!response.ok) throw new Error("Error en servidor");
+
                 let data = await response.json();
 
+                if (!data.analisis || !data.estrategia || !data.riesgo) throw new Error("Datos incompletos");
+
+                // 🎨 Clase de riesgo
+                let claseRiesgo = "";
+                if (data.riesgo === "alto") claseRiesgo = "riesgo-alto";
+                else if (data.riesgo === "medio") claseRiesgo = "riesgo-medio";
+                else claseRiesgo = "riesgo-bajo";
+
                 panelAnalisis.innerHTML = `
-                    <h3>🚨 Riesgo: ${data.riesgo}</h3>
-                    <p>${data.analisis}</p>
+                    <div class="resultado-ia ${claseRiesgo}">
+                        <h3>🚨 Riesgo: ${data.riesgo.toUpperCase()}</h3>
+                        <p><b>Explicación:</b> ${data.analisis}</p>
+                    </div>
                 `;
 
                 panelEstrategia.innerHTML = `
-                    <p>${data.estrategia}</p>
+                    <div class="resultado-ia">
+                        <h3>📌 Acciones</h3>
+                        <p>${data.estrategia}</p>
+                    </div>
                 `;
 
-                // 🔁 Cambiar botón a VER
+                // Color visual
+                let riesgoBox = document.querySelector(".riesgo_section");
+                if (data.riesgo === "alto") riesgoBox.style.background = "#ff4d4d";
+                else if (data.riesgo === "medio") riesgoBox.style.background = "#f0cb5b";
+                else riesgoBox.style.background = "#28a745";
+
+                // Cambiar botón a "Ver"
                 btn.innerText = "Ver";
                 btn.classList.remove("btn-analizar");
                 btn.classList.add("btn-ver-analisis");
+                btn.setAttribute("data-analisis", data.analisis);
+                btn.setAttribute("data-estrategia", data.estrategia);
 
-                btn.dataset.analisis = data.analisis;
-                btn.dataset.estrategia = data.estrategia;
+                // Animación al terminar
+                if (robotViewer) {
+                    robotViewer.animationName = 'Alegre';
+                    robotViewer.play();
+                }
 
             } catch (error) {
-    console.error(error);
+                console.error(error);
+                panelAnalisis.innerText = "❌ Error con IA";
+                panelEstrategia.innerText = "Intenta de nuevo";
+            }
+        });
+    });
 
-    mensajeInicial.style.display = 'none';
-    analisisContainer.classList.add('active');
-
-    panelAnalisis.innerHTML = `
-        <div style="color:red;">
-            ❌ Error al analizar cliente
-        </div>
-    `;
-    panelEstrategia.innerText = "";
-}
-        }
-
-        // =========================
-        // 🟢 BOTÓN VER
-        // =========================
-        if (btn.classList.contains("btn-ver-analisis")) {
-
+    // =========================
+    // 🟢 BOTÓN VER
+    // =========================
+    document.querySelectorAll('.btn-ver-analisis').forEach(boton => {
+        boton.addEventListener('click', (e) => {
             mensajeInicial.style.display = 'none';
             analisisContainer.classList.add('active');
 
-            panelAnalisis.textContent = btn.dataset.analisis;
-            panelEstrategia.textContent = btn.dataset.estrategia;
-        }
+            const analisis = e.target.getAttribute('data-analisis');
+            const estrategia = e.target.getAttribute('data-estrategia');
 
+            panelAnalisis.textContent = analisis;
+            panelEstrategia.textContent = estrategia;
+
+            if (robotViewer) {
+                robotViewer.animationName = 'Alegre';
+                robotViewer.play();
+            }
+        });
     });
 
-});
+    // =========================
     // 🗑 BOTONES ELIMINAR
+    // =========================
     document.querySelectorAll('.btn-eliminar').forEach(btn => {
         btn.addEventListener('click', async () => {
             const id = btn.dataset.id;
@@ -108,7 +138,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // 🔥 MODAL
+    // =========================
+    // 🔥 MODAL AGREGAR CLIENTE
+    // =========================
     const btnAbrirModal = document.getElementById('btn-abrir-modal');
     const btnCerrarModal = document.getElementById('btn-cerrar-modal');
     const modalFormulario = document.querySelector('.formulario_container');
@@ -125,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
+});
 
 // 🔐 CSRF
 function getCSRFToken() {

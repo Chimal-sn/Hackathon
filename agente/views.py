@@ -29,7 +29,7 @@ def analizar_cliente(request, id):
     try:
         cliente = Cliente.objects.get(id=id)
 
-        api_key = "AIzaSyBNamAAEEQ6yLin34EazcFtqRHKUmFhAYY"
+        api_key = "[ENCRYPTION_KEY]"
         client = genai.Client(api_key=api_key)
 
         prompt = f"""
